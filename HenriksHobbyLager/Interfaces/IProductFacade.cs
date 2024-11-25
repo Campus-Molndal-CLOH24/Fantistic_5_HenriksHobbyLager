@@ -1,4 +1,5 @@
-﻿using RefactoringExercise;
+﻿using HenriksHobbyLager.Models;
+using RefactoringExercise;
 
 namespace HenriksHobbyLager.Interfaces
 {

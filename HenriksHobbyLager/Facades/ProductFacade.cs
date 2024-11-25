@@ -1,4 +1,5 @@
 ﻿using HenriksHobbyLager.Interfaces;
+using HenriksHobbyLager.Models;
 using RefactoringExercise;
 using RefactoringExercise.Interfaces;
 
