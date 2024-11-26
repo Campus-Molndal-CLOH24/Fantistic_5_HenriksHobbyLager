@@ -1,6 +1,7 @@
 ﻿using HenriksHobbyLager.Database;
+using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
-using RefactoringExercise.Interfaces;
+
 
 namespace HenriksHobbyLager.Repositories;
 
@@ -9,38 +10,54 @@ public class SQLiteProductRepository : IRepository<Product>
     private readonly SqliteDbcontext _sqliteSqlDbContext;
 
 
-    public SQLiteProductRepository(SqliteDbcontext sqlDbContext)
+    public SQLiteProductRepository(SqliteDbcontext dbContext)
     {
-        _sqliteSqlDbContext = sqlDbContext;
+        _sqliteSqlDbContext = dbContext;
     }
     public IEnumerable<Product> GetAll()
     {
-        throw new NotImplementedException();
+        return _sqliteSqlDbContext.Products.ToList();
     }
 
     public Product GetById(int id)
     {
-        throw new NotImplementedException();
+        return _sqliteSqlDbContext.Products.Find(id);
     }
 
     public void Add(Product entity)
     {
+        entity.Created = DateTime.Now;
         _sqliteSqlDbContext.Products.Add(entity);
         _sqliteSqlDbContext.SaveChanges();
     }
 
     public void Update(Product entity)
     {
-        throw new NotImplementedException();
+        var existingProduct = _sqliteSqlDbContext.Products.Find(entity.Id);
+        if (existingProduct != null)
+        {
+            existingProduct.Name = entity.Name;
+            existingProduct.Price = entity.Price;
+            existingProduct.Stock = entity.Stock;
+            existingProduct.Category = entity.Category;
+            existingProduct.LastUpdated = DateTime.Now;
+
+            _sqliteSqlDbContext.SaveChanges();
+        }
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        var product = _sqliteSqlDbContext.Products.Find(id);
+        if (product != null)
+        {
+            _sqliteSqlDbContext.Products.Remove(product);
+            _sqliteSqlDbContext.SaveChanges();
+        }
     }
 
     public IEnumerable<Product> Search(Func<Product, bool> predicate)
     {
-        throw new NotImplementedException();
+        return _sqliteSqlDbContext.Products.Where(predicate).ToList();
     }
 }

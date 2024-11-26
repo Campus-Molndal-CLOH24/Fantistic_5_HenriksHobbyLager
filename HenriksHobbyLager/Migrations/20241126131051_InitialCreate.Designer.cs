@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HenriksHobbyLager.Migrations
 {
     [DbContext(typeof(SqliteDbcontext))]
-    [Migration("20241126093418_InitialCreate")]
+    [Migration("20241126131051_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
