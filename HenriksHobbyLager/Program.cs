@@ -40,7 +40,7 @@ using HenriksHobbyLager.Models;
 using HenriksHobbyLager.Repositories;
 using HenriksHobbyLager.UI;
 using RefactoringExercise.Interfaces;
-
+using Microsoft.EntityFrameworkCore;
 namespace RefactoringExercise
 {
     class Program
