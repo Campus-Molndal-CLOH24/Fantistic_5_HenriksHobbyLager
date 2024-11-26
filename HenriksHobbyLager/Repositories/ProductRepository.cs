@@ -1,6 +1,5 @@
-﻿using HenriksHobbyLager.Models;
-using RefactoringExercise;
-using RefactoringExercise.Interfaces;
+﻿using HenriksHobbyLager.Interfaces;
+using HenriksHobbyLager.Models;
 
 namespace HenriksHobbyLager.Repositories
 {

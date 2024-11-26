@@ -1,6 +1,5 @@
 ﻿using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
-using RefactoringExercise;
 
 namespace HenriksHobbyLager.UI
 {
@@ -51,7 +50,7 @@ namespace HenriksHobbyLager.UI
                 Console.ReadKey();
             }
         }
-        
+
         // Visar alla produkter som finns i "databasen"
         private static void ShowAllProducts(IProductFacade productFacade)
         {
@@ -68,7 +67,7 @@ namespace HenriksHobbyLager.UI
                 DisplayProduct(product);
             }
         }
-        
+
         // Lägger till en ny produkt i systemet
         private static void AddProduct(IProductFacade productFacade)
         {
@@ -107,7 +106,7 @@ namespace HenriksHobbyLager.UI
             productFacade.CreateProduct(product);
             Console.WriteLine("Produkt tillagd! Glöm inte att hålla datorn igång!");
         }
-        
+
         // Uppdaterar en befintlig produkt
         private static void UpdateProduct(IProductFacade productFacade)
         {
@@ -149,10 +148,10 @@ namespace HenriksHobbyLager.UI
 
             product.LastUpdated = DateTime.Now;  // Håller koll på när saker ändras
             Console.WriteLine("Produkt uppdaterad! Stäng fortfarande inte av datorn!");
-            
+
             productFacade.UpdateProduct(product);
         }
-        
+
         // Ta bort en produkt (använd med försiktighet!)
         private static void DeleteProduct(IProductFacade productFacade)
         {
@@ -169,11 +168,11 @@ namespace HenriksHobbyLager.UI
                 Console.WriteLine("Produkt hittades inte! Puh, inget blev raderat av misstag!");
                 return;
             }
-            
+
             productFacade.DeleteProduct(product.Id);
             Console.WriteLine("Produkt borttagen! (Hoppas det var meningen)");
         }
-        
+
         // Sökfunktion - Min stolthet! Söker i både namn och kategori
         private static void SearchProducts(IProductFacade productFacade)
         {
@@ -193,7 +192,7 @@ namespace HenriksHobbyLager.UI
                 DisplayProduct(product);
             }
         }
-        
+
         private static void DisplayProduct(Product product)
         {
             // Snygga streck som separerar produkterna
@@ -207,7 +206,7 @@ namespace HenriksHobbyLager.UI
                 Console.WriteLine($"Senast uppdaterad: {product.LastUpdated}");
             Console.WriteLine(new string('-', 40));  // Snyggt streck mellan produkterna
         }
-        
-        
+
+
     }
 }

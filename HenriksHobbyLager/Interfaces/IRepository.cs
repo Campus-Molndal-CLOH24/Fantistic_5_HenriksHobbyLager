@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RefactoringExercise.Interfaces;
+﻿namespace HenriksHobbyLager.Interfaces;
 
 internal interface IRepository<T>
 {
