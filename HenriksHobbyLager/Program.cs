@@ -31,7 +31,6 @@ namespace HenriksHobbyLager
             Console.WriteLine("Choose the storage type: 'sqlite' or 'mongodb'");
             string repositoryType = Console.ReadLine()?.ToLower() ?? "sqlite";
 
-            // Use the ProductRepositoryFactory to create the repository
             var factory = new ProductRepositoryFactory();
             IRepository<Product> repository;
 
@@ -50,11 +49,9 @@ namespace HenriksHobbyLager
                 return;
             }
 
-            // Initialize the facade and UI handler
             var productFacade = new ProductFacade(repository);
             var consoleMenuHandler = new ConsoleMenuHandler();
 
-            // Run the console menu
             ConsoleMenuHandler.RunMenu(productFacade);
         }
     }
