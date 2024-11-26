@@ -9,7 +9,7 @@ namespace HenriksHobbyLager.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=HenriksHobbyLager.db");
+            optionsBuilder.UseSqlite("Data Source=HenriksBalleLager.db");
         }
 
     }

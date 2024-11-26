@@ -34,6 +34,8 @@ var anka = new Product
     PS. Om någon hittar det här i framtiden: Jag vet att koden kunde varit snyggare, 
     men den fungerar! Och det är huvudsaken... right?
 */
+
+using HenriksHobbyLager.Database;
 using HenriksHobbyLager.Facades;
 using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
@@ -54,7 +56,9 @@ namespace RefactoringExercise
 
         static void Main(string[] args)
         {
-            IRepository<Product> _repository = new ProductRepository();
+            SqliteDbcontext sqliteDbcontext = new SqliteDbcontext();
+            
+            IRepository<Product> _repository = new SQLiteProductRepository(sqliteDbcontext);
             IProductFacade _productFacade = new ProductFacade(_repository);
             ConsoleMenuHandler _consoleMenuHandler = new ConsoleMenuHandler();
             ConsoleMenuHandler.RunMenu(_productFacade);
