@@ -17,6 +17,7 @@
     * Göra en logga till programmet i Paint
 */
 
+using HenriksHobbyLager.Database;
 using HenriksHobbyLager.Facades;
 using HenriksHobbyLager.Factories;
 using HenriksHobbyLager.Interfaces;
@@ -33,6 +34,11 @@ namespace HenriksHobbyLager
 
             var factory = new ProductRepositoryFactory();
             IRepository<Product> repository;
+
+            using (var context = new SqliteDbcontext())
+            {
+                context.EnsureProductsTableExists();
+            }
 
             try
             {
