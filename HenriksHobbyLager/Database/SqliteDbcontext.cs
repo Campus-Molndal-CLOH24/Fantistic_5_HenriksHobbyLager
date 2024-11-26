@@ -42,6 +42,13 @@ namespace HenriksHobbyLager.Database
                         )";
                     command.ExecuteNonQuery();
 
+                    command.CommandText = @"
+                        CREATE INDEX IF NOT EXISTS idx_product_name ON Products(Name);
+                        CREATE INDEX IF NOT EXISTS idx_product_category ON Products(Category);
+                        CREATE INDEX IF NOT EXISTS idx_product_price ON Products(Price);
+                    ";
+                    command.ExecuteNonQuery();
+
                     Console.WriteLine("Products table created.");
                 }
                 else
