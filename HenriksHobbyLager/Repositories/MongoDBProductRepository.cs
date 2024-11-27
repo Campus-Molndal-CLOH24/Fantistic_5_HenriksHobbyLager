@@ -1,6 +1,7 @@
 ﻿using HenriksHobbyLager.Database;
 using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace HenriksHobbyLager.Repositories
@@ -16,7 +17,15 @@ namespace HenriksHobbyLager.Repositories
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+            try
+            {
+                return await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("nån har klippt internetsladden", ex);
+            }
+
         }
 
         public async Task<Product> GetByIdAsync(int id)
