@@ -35,19 +35,9 @@ namespace HenriksHobbyLager
             var factory = new ProductRepositoryFactory();
             IRepository<Product> repository;
 
-            using (var context = new SqliteDbcontext())
-            {
-                context.EnsureProductsTableExists();
-            }
-
             try
             {
                 repository = factory.CreateRepository(repositoryType);
-                if (repository == null)
-                {
-                    Console.WriteLine("MongoDB repository is not implemented yet.");
-                    return;
-                }
             }
             catch (ArgumentException ex)
             {
