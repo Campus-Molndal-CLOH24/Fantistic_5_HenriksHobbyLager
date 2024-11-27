@@ -1,7 +1,6 @@
 ﻿using HenriksHobbyLager.Database;
 using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace HenriksHobbyLager.Repositories
@@ -15,7 +14,7 @@ namespace HenriksHobbyLager.Repositories
         {
             _mongoDbContext = dbContext;
         }
-        
+
         public IEnumerable<Product> GetAll()
         {
             return _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToList();
@@ -36,17 +35,7 @@ namespace HenriksHobbyLager.Repositories
 
         public void Update(Product entity)
         {
-            /*var existingProduct = _mongoDbContext.Products.Find(entity.Id);
-            if (existingProduct != null)
-            {
-                existingProduct.Name = entity.Name;
-                existingProduct.Price = entity.Price;
-                existingProduct.Stock = entity.Stock;
-                existingProduct.Category = entity.Category;
-                existingProduct.LastUpdated = DateTime.Now;
-
-                _mongoDbContext.SaveChanges();
-            }*/
+            _mongoDbContext.Products.FindOneAndReplace(product => product.Id == entity.Id, entity);
         }
 
         public void Delete(int id)
@@ -56,8 +45,7 @@ namespace HenriksHobbyLager.Repositories
 
         public IEnumerable<Product> Search(Func<Product, bool> predicate)
         {
-            //return _mongoDbContext.Products.Where(predicate).ToList();
-            return null;
+            return _mongoDbContext.Products.AsQueryable().Where(predicate).ToList();
         }
 
         private int GetLastId()
@@ -71,7 +59,7 @@ namespace HenriksHobbyLager.Repositories
                 {
                     idList.Add(product.Id);
                 }
-            
+
                 idList.Sort();
 
                 return idList[idList.Count - 1];
@@ -80,7 +68,7 @@ namespace HenriksHobbyLager.Repositories
             {
                 return 0;
             }
-            
+
         }
     }
 }
