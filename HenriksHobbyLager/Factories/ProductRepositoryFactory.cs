@@ -18,9 +18,7 @@ namespace HenriksHobbyLager.Factories
             else if (type.ToLower() == "mongodb")
             {
                 DotNetEnv.Env.Load();
-                //string connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION");
-                string connectionString = "mongodb://localhost:27017/";
-                Console.WriteLine($"string = '{connectionString}'");
+                string connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION");
                 var dbName = "HenriksHobbyLager";
                 var dbContext = new MongoDbcontext(connectionString, dbName);
                 dbContext.EnsureProductsCollectionExists();

@@ -29,9 +29,9 @@ namespace HenriksHobbyLager.Repositories
 
         public void Add(Product entity)
         {
+            entity.Id = GetLastId() + 1;
             entity.Created = DateTime.Now;
             _mongoDbContext.Products.InsertOne(entity);
-            _mongoDbContext.SaveChanges();
         }
 
         public void Update(Product entity)
@@ -51,18 +51,36 @@ namespace HenriksHobbyLager.Repositories
 
         public void Delete(int id)
         {
-            /*var product = _mongoDbContext.Products.Find(id);
-            if (product != null)
-            {
-                _mongoDbContext.Products.Remove(product);
-                _mongoDbContext.SaveChanges();
-            }*/
+            _mongoDbContext.Products.DeleteOne(product => product.Id == id);
         }
 
         public IEnumerable<Product> Search(Func<Product, bool> predicate)
         {
             //return _mongoDbContext.Products.Where(predicate).ToList();
             return null;
+        }
+
+        private int GetLastId()
+        {
+            var products = GetAll();
+
+            if (products.Any())
+            {
+                List<int> idList = new List<int>();
+                foreach (var product in products)
+                {
+                    idList.Add(product.Id);
+                }
+            
+                idList.Sort();
+
+                return idList[idList.Count - 1];
+            }
+            else
+            {
+                return 0;
+            }
+            
         }
     }
 }
