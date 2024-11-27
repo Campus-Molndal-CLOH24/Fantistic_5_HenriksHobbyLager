@@ -17,7 +17,6 @@
     * Göra en logga till programmet i Paint
 */
 
-using HenriksHobbyLager.Database;
 using HenriksHobbyLager.Facades;
 using HenriksHobbyLager.Factories;
 using HenriksHobbyLager.Interfaces;
@@ -48,7 +47,7 @@ namespace HenriksHobbyLager
             var productFacade = new ProductFacade(repository);
             var consoleMenuHandler = new ConsoleMenuHandler();
 
-            ConsoleMenuHandler.RunMenu(productFacade);
+            ConsoleMenuHandler.RunMenuAsync(productFacade).Wait();
         }
     }
 }
