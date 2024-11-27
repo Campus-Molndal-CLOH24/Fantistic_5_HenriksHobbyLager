@@ -20,17 +20,17 @@ Parham
 --Explain--
 
 
-## Hur man kör programmet
+## Hur man kÃ¶r programmet
 
 --Explain--
 
 
-## Eventuella konfigurationsinställningar
+## Eventuella konfigurationsinstÃ¤llningar
 
 --Explain--
 
 
-## Lista över implementerade patterns
+## Lista Ã¶ver implementerade patterns
 
 --Explain--
 

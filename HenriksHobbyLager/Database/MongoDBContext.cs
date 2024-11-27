@@ -1,9 +1,10 @@
 ﻿using HenriksHobbyLager.Models;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace HenriksHobbyLager.Database
 {
-    public class MongoDbcontext
+    public class MongoDbcontext : DbContext
     {
         private readonly IMongoDatabase _database;
 

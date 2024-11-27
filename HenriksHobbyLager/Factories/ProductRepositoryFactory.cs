@@ -12,11 +12,19 @@ namespace HenriksHobbyLager.Factories
             if (type.ToLower() == "sqlite")
             {
                 var dbContext = new SqliteDbcontext();
+                dbContext.EnsureProductsTableExists();
                 return new SQLiteProductRepository(dbContext);
             }
             else if (type.ToLower() == "mongodb")
             {
-                return null; //new MongoDBProductRepository();
+                DotNetEnv.Env.Load();
+                //string connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION");
+                string connectionString = "mongodb://localhost:27017/";
+                Console.WriteLine($"string = '{connectionString}'");
+                var dbName = "HenriksHobbyLager";
+                var dbContext = new MongoDbcontext(connectionString, dbName);
+                dbContext.EnsureProductsCollectionExists();
+                return new MongoDBProductRepository(dbContext);
             }
             else
             {
