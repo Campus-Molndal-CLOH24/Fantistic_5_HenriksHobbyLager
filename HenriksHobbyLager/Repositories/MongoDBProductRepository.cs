@@ -7,7 +7,6 @@ namespace HenriksHobbyLager.Repositories
 {
     public class MongoDBProductRepository : IRepository<Product>
     {
-
         private readonly MongoDbcontext _mongoDbContext;
 
         public MongoDBProductRepository(MongoDbcontext dbContext)
@@ -15,60 +14,53 @@ namespace HenriksHobbyLager.Repositories
             _mongoDbContext = dbContext;
         }
 
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToList();
-
+            return await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
         }
 
-        public Product GetById(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            return _mongoDbContext.Products.Find(product => product.Id == id).FirstOrDefault();
+            return await _mongoDbContext.Products.Find(product => product.Id == id).FirstOrDefaultAsync();
         }
 
-        public void Add(Product entity)
+        public async Task AddAsync(Product entity)
         {
-            entity.Id = GetLastId() + 1;
+            entity.Id = await GetLastIdAsync() + 1;
             entity.Created = DateTime.Now;
-            _mongoDbContext.Products.InsertOne(entity);
+            await _mongoDbContext.Products.InsertOneAsync(entity);
         }
 
-        public void Update(Product entity)
+        public async Task UpdateAsync(Product entity)
         {
-            _mongoDbContext.Products.FindOneAndReplace(product => product.Id == entity.Id, entity);
+            await _mongoDbContext.Products.FindOneAndReplaceAsync(product => product.Id == entity.Id, entity);
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            _mongoDbContext.Products.DeleteOne(product => product.Id == id);
+            await _mongoDbContext.Products.DeleteOneAsync(product => product.Id == id);
         }
 
-        public IEnumerable<Product> Search(Func<Product, bool> predicate)
+        public async Task<IEnumerable<Product>> SearchAsync(Func<Product, bool> predicate)
         {
-            return _mongoDbContext.Products.AsQueryable().Where(predicate).ToList();
+            var products = await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+            return products.Where(predicate);
         }
 
-        private int GetLastId()
+        private async Task<int> GetLastIdAsync()
         {
-            var products = GetAll();
+            var products = await GetAllAsync();
 
             if (products.Any())
             {
-                List<int> idList = new List<int>();
-                foreach (var product in products)
-                {
-                    idList.Add(product.Id);
-                }
-
+                List<int> idList = products.Select(p => p.Id).ToList();
                 idList.Sort();
-
-                return idList[idList.Count - 1];
+                return idList[^1]; // Using C# index from end operator
             }
             else
             {
                 return 0;
             }
-
         }
     }
 }

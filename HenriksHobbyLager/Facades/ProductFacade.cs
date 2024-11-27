@@ -5,41 +5,44 @@ namespace HenriksHobbyLager.Facades
 {
     internal class ProductFacade : IProductFacade
     {
-        private IRepository<Product> _repository;
+        private readonly IRepository<Product> _repository;
+
         public ProductFacade(IRepository<Product> repository)
         {
             _repository = repository;
         }
-        public void CreateProduct(Product product)
+
+        public async Task CreateProductAsync(Product product)
         {
-            _repository.Add(product);
+            await _repository.AddAsync(product);
         }
 
-        public void DeleteProduct(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            _repository.Delete(id);
+            await _repository.DeleteAsync(id);
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return _repository.GetAll();
+            return await _repository.GetAllAsync();
         }
 
-        public Product GetProduct(int id)
+        public async Task<Product> GetProductAsync(int id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetByIdAsync(id);
         }
 
-        public IEnumerable<Product> SearchProducts(string searchTerm)
+        public async Task<IEnumerable<Product>> SearchProductsAsync(string searchTerm)
         {
-            return _repository.Search(product =>
+            var products = await _repository.GetAllAsync();
+            return products.Where(product =>
                 product.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                 product.Category.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
         }
 
-        public void UpdateProduct(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
-            _repository.Update(product);
+            await _repository.UpdateAsync(product);
         }
     }
 }
