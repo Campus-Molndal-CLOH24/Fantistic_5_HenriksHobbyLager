@@ -19,7 +19,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Ett fel uppstod vid hämtning av produkter. Försök igen.", ex);
+                    throw new Exception("Ett fel uppstod vid hämtning av produkter. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
@@ -35,7 +35,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Ett fel uppstod när produkten skulle hämtas. Försök igen.", ex);
+                    throw new Exception("Ett fel uppstod när produkten skulle hämtas. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
@@ -53,7 +53,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Ett fel uppstod. Kontakta supporten.", ex);
+                    throw new Exception("Ett fel uppstod när produkten skulle läggas till. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
@@ -79,11 +79,11 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (DbUpdateException ex)
                 {
-                    throw new Exception("Ett fel uppstod vid uppdatering av produkten. Försök igen.", ex);
+                    throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Ett fel uppstod. Kontakta supporten.", ex);
+                    throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
@@ -108,11 +108,11 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (DbUpdateException ex)
                 {
-                    throw new Exception("An error occured while deleting the product. Please try again.", ex);
+                    throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An unexpected error occured. Please contact support.", ex);
+                    throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
@@ -131,7 +131,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occured while searching for products. Please try again.", ex);
+                    throw new Exception("Ett fel uppstod vid produktsökning. Vänligen försök igen eller kontakta supporten.", ex);
                 }
             }
             
