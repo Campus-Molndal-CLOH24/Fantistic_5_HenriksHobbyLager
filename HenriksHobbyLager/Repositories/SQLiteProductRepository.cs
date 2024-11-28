@@ -7,20 +7,33 @@ namespace HenriksHobbyLager.Repositories
 {
     public class SQLiteProductRepository : IRepository<Product>
     {
+
         
+        private readonly TimeSpan _timeSpan;
+
+        public SQLiteProductRepository(float timeOut)
+        {
+            _timeSpan = TimeSpan.FromSeconds(timeOut);
+        }
+
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
-                {                      
-                    return await _sqliteDbContext.Products.ToListAsync();
-                }
-                catch (Exception ex)
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
                 {
-                    throw new Exception("Ett fel uppstod vid hämtning av produkter. Vänligen försök igen eller kontakta supporten.", ex);
+                    try
+                    {                      
+                        return await _sqliteDbContext.Products.ToListAsync(cancellationTokenSource.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Ett fel uppstod vid hämtning av produkter. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
                 }
+                
+                
             }
             
         }
@@ -29,14 +42,18 @@ namespace HenriksHobbyLager.Repositories
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
                 {
-                    return await _sqliteDbContext.Products.FindAsync(id);
+                    try
+                    {
+                        return await _sqliteDbContext.Products.FindAsync(id, cancellationTokenSource.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Ett fel uppstod när produkten skulle hämtas. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ett fel uppstod när produkten skulle hämtas. Vänligen försök igen eller kontakta supporten.", ex);
-                }
+                
             }
             
         }
@@ -45,16 +62,20 @@ namespace HenriksHobbyLager.Repositories
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
                 {
-                    entity.Created = DateTime.Now;
-                    await _sqliteDbContext.Products.AddAsync(entity);
-                    await _sqliteDbContext.SaveChangesAsync();
+                    try
+                    {
+                        entity.Created = DateTime.Now;
+                        await _sqliteDbContext.Products.AddAsync(entity, cancellationTokenSource.Token);
+                        await _sqliteDbContext.SaveChangesAsync(cancellationTokenSource.Token);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Ett fel uppstod när produkten skulle läggas till. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ett fel uppstod när produkten skulle läggas till. Vänligen försök igen eller kontakta supporten.", ex);
-                }
+                
             }
             
         }
@@ -63,28 +84,32 @@ namespace HenriksHobbyLager.Repositories
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
                 {
-                    var existingProduct = await _sqliteDbContext.Products.FindAsync(entity.Id);
-                    if (existingProduct != null)
+                    try
                     {
-                        existingProduct.Name = entity.Name;
-                        existingProduct.Price = entity.Price;
-                        existingProduct.Stock = entity.Stock;
-                        existingProduct.Category = entity.Category;
-                        existingProduct.LastUpdated = DateTime.Now;
+                        var existingProduct = await _sqliteDbContext.Products.FindAsync(entity.Id, cancellationTokenSource.Token);
+                        if (existingProduct != null)
+                        {
+                            existingProduct.Name = entity.Name;
+                            existingProduct.Price = entity.Price;
+                            existingProduct.Stock = entity.Stock;
+                            existingProduct.Category = entity.Category;
+                            existingProduct.LastUpdated = DateTime.Now;
 
-                        await _sqliteDbContext.SaveChangesAsync();
+                            await _sqliteDbContext.SaveChangesAsync(cancellationTokenSource.Token);
+                        }
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
                     }
                 }
-                catch (DbUpdateException ex)
-                {
-                    throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Ett fel uppstod vid uppdatering av produkten med ID: {entity.Id}. Vänligen försök igen eller kontakta supporten.", ex);
-                }
+                
             }
             
         }
@@ -93,23 +118,27 @@ namespace HenriksHobbyLager.Repositories
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
-                {            
-                    var product = await _sqliteDbContext.Products.FindAsync(id);
-                    if (product != null)
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
+                {
+                    try
+                    {            
+                        var product = await _sqliteDbContext.Products.FindAsync(id, cancellationTokenSource.Token);
+                        if (product != null)
+                        {
+                            _sqliteDbContext.Products.Remove(product);
+                            await _sqliteDbContext.SaveChangesAsync(cancellationTokenSource.Token);
+                        }                   
+                    }
+                    catch (DbUpdateException ex)
                     {
-                        _sqliteDbContext.Products.Remove(product);
-                        await _sqliteDbContext.SaveChangesAsync();
-                    }                   
+                        throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
                 }
-                catch (DbUpdateException ex)
-                {
-                    throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Kunde inte radera produkten med ID: {id}. Vänligen försök igen eller kontakta supporten.", ex);
-                }
+                
             }
             
         }
@@ -118,19 +147,21 @@ namespace HenriksHobbyLager.Repositories
         {
             using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                try
+                using (var cancellationTokenSource = new CancellationTokenSource(_timeSpan))
                 {
-                    // EF Core does not support Func<T, bool> directly for filtering in the database,
-                    // so this is evaluated in memory.
-                    var products = await _sqliteDbContext.Products.ToListAsync();
-                    return products.Where(predicate);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ett fel uppstod vid produktsökning. Vänligen försök igen eller kontakta supporten.", ex);
+                    try
+                    {
+                        // EF Core does not support Func<T, bool> directly for filtering in the database,
+                        // so this is evaluated in memory.
+                        var products = await _sqliteDbContext.Products.ToListAsync(cancellationTokenSource.Token);
+                        return products.Where(predicate);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Ett fel uppstod vid produktsökning. Vänligen försök igen eller kontakta supporten.", ex);
+                    }
                 }
             }
-            
         }
     }
 }

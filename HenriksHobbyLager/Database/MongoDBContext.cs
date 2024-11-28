@@ -8,7 +8,7 @@ namespace HenriksHobbyLager.Database
     {
         private readonly IMongoDatabase _database;
 
-        public MongoDbcontext(string connectionString, string databaseName)
+        public MongoDbcontext(string connectionString, string databaseName, float timeOut)
         {
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase(databaseName);
@@ -19,6 +19,7 @@ namespace HenriksHobbyLager.Database
 
         public void EnsureProductsCollectionExists()
         {
+            
             // Kontrollera om "Products"-collection redan finns
             var collectionNames = _database.ListCollectionNames().ToList();
             if (!collectionNames.Contains("Products"))
