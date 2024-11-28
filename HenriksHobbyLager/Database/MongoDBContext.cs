@@ -7,13 +7,11 @@ namespace HenriksHobbyLager.Database
     public class MongoDbcontext : DbContext
     {
         private readonly IMongoDatabase _database;
-        private TimeSpan _timeSpan;
 
         public MongoDbcontext(string connectionString, string databaseName, float timeOut)
         {
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase(databaseName);
-            _timeSpan = TimeSpan.FromSeconds(timeOut);
         }
 
         // Hämtar collection för produkterna
