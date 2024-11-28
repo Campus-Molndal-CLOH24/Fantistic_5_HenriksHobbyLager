@@ -22,7 +22,7 @@ namespace HenriksHobbyLager.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not fetch products. Please try again later", ex);
+                throw new Exception("Ett fel uppstod vid hämtning av produkter. Försök igen.", ex);
             }
 
         }
@@ -35,7 +35,7 @@ namespace HenriksHobbyLager.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not fetch the product with ID {id}. Please try again later.", ex);
+                throw new Exception("Ett fel uppstod när produkten skulle hämtas. Försök igen.", ex);
             }
             
         }
@@ -50,7 +50,7 @@ namespace HenriksHobbyLager.Repositories
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not add the product. Please try again later.", ex);
+                throw new Exception("Ett fel uppstod. Kontakta supporten.", ex);
             }
         }
 

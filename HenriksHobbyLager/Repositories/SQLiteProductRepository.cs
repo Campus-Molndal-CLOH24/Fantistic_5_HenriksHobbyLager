@@ -19,7 +19,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occured while retrieving products. Please try again.", ex);
+                    throw new Exception("Ett fel uppstod vid hämtning av produkter. Försök igen.", ex);
                 }
             }
             
@@ -35,7 +35,7 @@ namespace HenriksHobbyLager.Repositories
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occured while retrieving product. Please try again.", ex);
+                    throw new Exception("Ett fel uppstod när produkten skulle hämtas. Försök igen.", ex);
                 }
             }
             
@@ -51,13 +51,9 @@ namespace HenriksHobbyLager.Repositories
                     await _sqliteDbContext.Products.AddAsync(entity);
                     await _sqliteDbContext.SaveChangesAsync();
                 }
-                catch (DbUpdateException ex)
-                {
-                    throw new Exception("An error occured while adding the product to the database. Please try again.", ex);
-                }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occured. Please contact support.", ex);
+                    throw new Exception("Ett fel uppstod. Kontakta supporten.", ex);
                 }
             }
             
@@ -80,18 +76,14 @@ namespace HenriksHobbyLager.Repositories
 
                         await _sqliteDbContext.SaveChangesAsync();
                     }
-                    else
-                    {
-                        throw new Exception("Product not found.");
-                    }
                 }
                 catch (DbUpdateException ex)
                 {
-                    throw new Exception("An error occured while updating the product. Please try again.", ex);
+                    throw new Exception("Ett fel uppstod vid uppdatering av produkten. Försök igen.", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("An error occured. Please contact support.", ex);
+                    throw new Exception("Ett fel uppstod. Kontakta supporten.", ex);
                 }
             }
             
