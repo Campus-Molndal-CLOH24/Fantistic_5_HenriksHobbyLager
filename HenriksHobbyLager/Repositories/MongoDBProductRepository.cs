@@ -15,51 +15,102 @@ namespace HenriksHobbyLager.Repositories
         }
 
         public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            return await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+        {        
+            try
+            {
+                return await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not fetch products. Please try again later", ex);
+            }
+
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _mongoDbContext.Products.Find(product => product.Id == id).FirstOrDefaultAsync();
+            try
+            {
+                return await _mongoDbContext.Products.Find(product => product.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not fetch the product with ID {id}. Please try again later.", ex);
+            }
+            
         }
 
         public async Task AddAsync(Product entity)
         {
-            entity.Id = await GetLastIdAsync() + 1;
-            entity.Created = DateTime.Now;
-            await _mongoDbContext.Products.InsertOneAsync(entity);
+            try
+            {
+                entity.Id = await GetLastIdAsync() + 1;
+                entity.Created = DateTime.Now;
+                await _mongoDbContext.Products.InsertOneAsync(entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not add the product. Please try again later.", ex);
+            }
         }
 
         public async Task UpdateAsync(Product entity)
         {
-            await _mongoDbContext.Products.FindOneAndReplaceAsync(product => product.Id == entity.Id, entity);
+            try
+            {
+                await _mongoDbContext.Products.FindOneAndReplaceAsync(product => product.Id == entity.Id, entity);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not update the product with ID {entity.Id}. Please try again later.", ex);
+            }
         }
 
         public async Task DeleteAsync(int id)
         {
-            await _mongoDbContext.Products.DeleteOneAsync(product => product.Id == id);
+            try
+            {
+                await _mongoDbContext.Products.DeleteOneAsync(product => product.Id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not delete the product with ID {id}. Please try again later.", ex);
+            }
         }
 
         public async Task<IEnumerable<Product>> SearchAsync(Func<Product, bool> predicate)
         {
-            var products = await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
-            return products.Where(predicate);
+            try
+            {
+                var products = await _mongoDbContext.Products.Find(FilterDefinition<Product>.Empty).ToListAsync();
+                return products.Where(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not perform the search. Please try again later.");
+            }
         }
 
         private async Task<int> GetLastIdAsync()
         {
-            var products = await GetAllAsync();
+            try
+            {
+                var products = await GetAllAsync();
 
-            if (products.Any())
-            {
-                List<int> idList = products.Select(p => p.Id).ToList();
-                idList.Sort();
-                return idList[^1]; // Using C# index from end operator
+                if (products.Any())
+                {
+                    List<int> idList = products.Select(p => p.Id).ToList();
+                    idList.Sort();
+                    return idList[^1]; // Using C# index from end operator
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return 0;
+                throw new Exception("Could not determine the last product ID. Please try again later.");
             }
         }
     }
