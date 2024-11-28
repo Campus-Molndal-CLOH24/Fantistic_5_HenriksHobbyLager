@@ -36,7 +36,7 @@ namespace HenriksHobbyLager
 
             try
             {
-                repository = factory.CreateRepository(repositoryType);
+                repository = factory.CreateRepository(repositoryType, 5.0f);
             }
             catch (ArgumentException ex)
             {

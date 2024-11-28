@@ -7,7 +7,8 @@ namespace HenriksHobbyLager.Factories
 {
     internal class ProductRepositoryFactory : IRepositoryFactory<Product>
     {
-        public IRepository<Product> CreateRepository(string type)
+        
+        public IRepository<Product> CreateRepository(string type, float timeOut)
         {
             if (type.ToLower() == "sqlite")
             {
@@ -15,16 +16,16 @@ namespace HenriksHobbyLager.Factories
                 {
                     dbContext.EnsureProductsTableExists();
                 }
-                return new SQLiteProductRepository();
+                return new SQLiteProductRepository(timeOut);
             }
             else if (type.ToLower() == "mongodb")
             {
                 DotNetEnv.Env.Load();
                 string connectionString = Environment.GetEnvironmentVariable("MONGO_DB_CONNECTION");
                 var dbName = "HenriksHobbyLager";
-                var dbContext = new MongoDbcontext(connectionString, dbName);
+                var dbContext = new MongoDbcontext(connectionString, dbName, timeOut);
                 dbContext.EnsureProductsCollectionExists();
-                return new MongoDBProductRepository(dbContext);
+                return new MongoDBProductRepository(dbContext, timeOut);
             }
             else
             {

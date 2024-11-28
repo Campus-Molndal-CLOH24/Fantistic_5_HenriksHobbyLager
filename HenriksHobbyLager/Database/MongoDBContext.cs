@@ -7,11 +7,13 @@ namespace HenriksHobbyLager.Database
     public class MongoDbcontext : DbContext
     {
         private readonly IMongoDatabase _database;
+        private TimeSpan _timeSpan;
 
-        public MongoDbcontext(string connectionString, string databaseName)
+        public MongoDbcontext(string connectionString, string databaseName, float timeOut)
         {
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase(databaseName);
+            _timeSpan = TimeSpan.FromSeconds(timeOut);
         }
 
         // Hämtar collection för produkterna
@@ -19,6 +21,7 @@ namespace HenriksHobbyLager.Database
 
         public void EnsureProductsCollectionExists()
         {
+            
             // Kontrollera om "Products"-collection redan finns
             var collectionNames = _database.ListCollectionNames().ToList();
             if (!collectionNames.Contains("Products"))
