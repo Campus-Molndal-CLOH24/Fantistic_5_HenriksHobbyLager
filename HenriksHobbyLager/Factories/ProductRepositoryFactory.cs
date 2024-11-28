@@ -11,9 +11,11 @@ namespace HenriksHobbyLager.Factories
         {
             if (type.ToLower() == "sqlite")
             {
-                var dbContext = new SqliteDbcontext();
-                dbContext.EnsureProductsTableExists();
-                return new SQLiteProductRepository(dbContext);
+                using (var dbContext = new SqliteDbcontext())
+                {
+                    dbContext.EnsureProductsTableExists();
+                }
+                return new SQLiteProductRepository();
             }
             else if (type.ToLower() == "mongodb")
             {
