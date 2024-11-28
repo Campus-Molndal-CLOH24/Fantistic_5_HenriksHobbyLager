@@ -70,23 +70,37 @@ namespace HenriksHobbyLager.UI
 
             Console.Write("Namn: ");
             var name = Console.ReadLine();
+            while (string.IsNullOrWhiteSpace(name)) 
+            {
+                Console.WriteLine("Namn får inte vara tomt!");
+                Console.Write("Namn: ");
+                name = Console.ReadLine();
+            }
 
             Console.Write("Pris: ");
-            if (!decimal.TryParse(Console.ReadLine(), out decimal price))
+            decimal price;
+            while (!decimal.TryParse(Console.ReadLine(), out price))
             {
                 Console.WriteLine("Ogiltigt pris! Använd punkt istället för komma.");
-                return;
+                Console.Write("Pris: ");
             }
 
             Console.Write("Antal i lager: ");
-            if (!int.TryParse(Console.ReadLine(), out int stock))
+            int stock;
+            while (!int.TryParse(Console.ReadLine(), out stock))
             {
                 Console.WriteLine("Ogiltig lagermängd! Hela tal endast.");
-                return;
+                Console.Write("Antal i lager: ");
             }
 
             Console.Write("Kategori: ");
             var category = Console.ReadLine();
+            while (string.IsNullOrWhiteSpace(category))
+            {
+                Console.WriteLine("Kategori får inte vara tomt!");
+                Console.Write("Kategori: ");
+                category = Console.ReadLine();
+            }
 
             var product = new Product
             {
@@ -104,10 +118,11 @@ namespace HenriksHobbyLager.UI
         private static async Task UpdateProductAsync(IProductFacade productFacade)
         {
             Console.Write("Ange produkt-ID att uppdatera: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            int id;
+            if (!int.TryParse(Console.ReadLine(), out id))
             {
                 Console.WriteLine("Ogiltigt ID! Bara siffror tack!");
-                return;
+                Console.Write("Ange produkt-ID att uppdatera: ");
             }
 
             var product = await productFacade.GetProductAsync(id);
@@ -122,15 +137,35 @@ namespace HenriksHobbyLager.UI
             if (!string.IsNullOrWhiteSpace(name))
                 product.Name = name;
 
-            Console.Write("Nytt pris (enter för att behålla): ");
-            var priceInput = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(priceInput) && decimal.TryParse(priceInput, out decimal price))
-                product.Price = price;
+            decimal price;
+            while (true) 
+            {
+                Console.Write("Nytt pris (enter för att behålla): ");
+                var priceInput = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(priceInput))
+                    break;
+
+                if (decimal.TryParse(priceInput, out price) && price > 0)
+                {                                       
+                    product.Price = price;
+                    break;
+                }
+                Console.WriteLine("Ogiltigt pris! Använd punkt istället för komma.");
+            }                            
 
             Console.Write("Ny lagermängd (enter för att behålla): ");
             var stockInput = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(stockInput) && int.TryParse(stockInput, out int stock))
+            if (!string.IsNullOrWhiteSpace(stockInput)) 
+            {
+                int stock;
+                do
+                {
+                    Console.WriteLine("Ogiltig lagermängd! Hela tal endast.");
+                    Console.Write("Ny lagermängd(enter för att behålla): ");
+                }
+                while (!int.TryParse(Console.ReadLine(), out stock));
                 product.Stock = stock;
+            }
 
             Console.Write("Ny kategori (enter för att behålla): ");
             var category = Console.ReadLine();
@@ -146,7 +181,8 @@ namespace HenriksHobbyLager.UI
         private static async Task DeleteProductAsync(IProductFacade productFacade)
         {
             Console.Write("Ange produkt-ID att ta bort: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            int id;
+            if (!int.TryParse(Console.ReadLine(), out id))
             {
                 Console.WriteLine("Ogiltigt ID! Bara siffror är tillåtna här.");
                 return;
