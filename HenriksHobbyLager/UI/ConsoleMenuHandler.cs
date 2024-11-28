@@ -81,7 +81,7 @@ namespace HenriksHobbyLager.UI
             decimal price;
             while (!decimal.TryParse(Console.ReadLine(), out price))
             {
-                Console.WriteLine("Ogiltigt pris! Använd punkt istället för komma.");
+                Console.WriteLine("Ogiltigt pris! Använd komma istället för punkt.");
                 Console.Write("Pris: ");
             }
 
