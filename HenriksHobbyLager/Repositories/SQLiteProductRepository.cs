@@ -7,123 +7,142 @@ namespace HenriksHobbyLager.Repositories
 {
     public class SQLiteProductRepository : IRepository<Product>
     {
-        private readonly SqliteDbcontext _sqliteDbContext;
-
-        public SQLiteProductRepository(SqliteDbcontext dbContext)
-        {
-            _sqliteDbContext = dbContext;
-        }
+        
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            try
-            {                      
-            return await _sqliteDbContext.Products.ToListAsync();
-            }
-            catch (Exception ex)
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                throw new Exception("An error occured while retrieving products. Please try again.", ex);
+                try
+                {                      
+                    return await _sqliteDbContext.Products.ToListAsync();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occured while retrieving products. Please try again.", ex);
+                }
             }
+            
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            try
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                return await _sqliteDbContext.Products.FindAsync(id);
+                try
+                {
+                    return await _sqliteDbContext.Products.FindAsync(id);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occured while retrieving product. Please try again.", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occured while retrieving product. Please try again.", ex);
-            }
+            
         }
 
         public async Task AddAsync(Product entity)
         {
-            try
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                entity.Created = DateTime.Now;
-                await _sqliteDbContext.Products.AddAsync(entity);
-                await _sqliteDbContext.SaveChangesAsync();
+                try
+                {
+                    entity.Created = DateTime.Now;
+                    await _sqliteDbContext.Products.AddAsync(entity);
+                    await _sqliteDbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new Exception("An error occured while adding the product to the database. Please try again.", ex);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occured. Please contact support.", ex);
+                }
             }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("An error occured while adding the product to the database. Please try again.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occured. Please contact support.", ex);
-            }
+            
         }
 
         public async Task UpdateAsync(Product entity)
         {
-            try
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                var existingProduct = await _sqliteDbContext.Products.FindAsync(entity.Id);
-                if (existingProduct != null)
+                try
                 {
-                    existingProduct.Name = entity.Name;
-                    existingProduct.Price = entity.Price;
-                    existingProduct.Stock = entity.Stock;
-                    existingProduct.Category = entity.Category;
-                    existingProduct.LastUpdated = DateTime.Now;
+                    var existingProduct = await _sqliteDbContext.Products.FindAsync(entity.Id);
+                    if (existingProduct != null)
+                    {
+                        existingProduct.Name = entity.Name;
+                        existingProduct.Price = entity.Price;
+                        existingProduct.Stock = entity.Stock;
+                        existingProduct.Category = entity.Category;
+                        existingProduct.LastUpdated = DateTime.Now;
 
-                    await _sqliteDbContext.SaveChangesAsync();
+                        await _sqliteDbContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("Product not found.");
+                    }
                 }
-                else
+                catch (DbUpdateException ex)
                 {
-                    throw new Exception("Product not found.");
+                    throw new Exception("An error occured while updating the product. Please try again.", ex);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occured. Please contact support.", ex);
                 }
             }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("An error occured while updating the product. Please try again.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occured. Please contact support.", ex);
-            }
+            
         }
 
         public async Task DeleteAsync(int id)
         {
-            try
-            {            
-                var product = await _sqliteDbContext.Products.FindAsync(id);
-                if (product != null)
-                {
-                    _sqliteDbContext.Products.Remove(product);
-                    await _sqliteDbContext.SaveChangesAsync();
-                }
-                else
-                {
-                    throw new Exception("Product not found.");
-                }
-            }
-            catch (DbUpdateException ex)
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                throw new Exception("An error occured while deleting the product. Please try again.", ex);
+                try
+                {            
+                    var product = await _sqliteDbContext.Products.FindAsync(id);
+                    if (product != null)
+                    {
+                        _sqliteDbContext.Products.Remove(product);
+                        await _sqliteDbContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("Product not found.");
+                    }
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new Exception("An error occured while deleting the product. Please try again.", ex);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An unexpected error occured. Please contact support.", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception("An unexpected error occured. Please contact support.", ex);
-            }
+            
         }
 
         public async Task<IEnumerable<Product>> SearchAsync(Func<Product, bool> predicate)
         {
-            try
+            using (var _sqliteDbContext = new SqliteDbcontext())
             {
-                // EF Core does not support Func<T, bool> directly for filtering in the database,
-                // so this is evaluated in memory.
-                var products = await _sqliteDbContext.Products.ToListAsync();
-                return products.Where(predicate);
+                try
+                {
+                    // EF Core does not support Func<T, bool> directly for filtering in the database,
+                    // so this is evaluated in memory.
+                    var products = await _sqliteDbContext.Products.ToListAsync();
+                    return products.Where(predicate);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occured while searching for products. Please try again.", ex);
+                }
             }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occured while searching for products. Please try again.", ex);
-            }
+            
         }
     }
 }
