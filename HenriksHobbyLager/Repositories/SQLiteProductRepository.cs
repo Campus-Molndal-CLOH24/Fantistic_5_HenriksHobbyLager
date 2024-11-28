@@ -100,11 +100,7 @@ namespace HenriksHobbyLager.Repositories
                     {
                         _sqliteDbContext.Products.Remove(product);
                         await _sqliteDbContext.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        throw new Exception("Product not found.");
-                    }
+                    }                   
                 }
                 catch (DbUpdateException ex)
                 {
