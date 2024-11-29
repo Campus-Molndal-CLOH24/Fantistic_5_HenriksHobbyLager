@@ -1,5 +1,6 @@
 ﻿using HenriksHobbyLager.Interfaces;
 using HenriksHobbyLager.Models;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace HenriksHobbyLager.UI
 {
@@ -151,20 +152,21 @@ namespace HenriksHobbyLager.UI
                     break;
                 }
                 Console.WriteLine("Ogiltigt pris! Använd punkt istället för komma.");
-            }                            
+            }
 
             Console.Write("Ny lagermängd (enter för att behålla): ");
             var stockInput = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(stockInput)) 
+
+            if (!string.IsNullOrWhiteSpace(stockInput))
             {
                 int stock;
-                do
+                while (!int.TryParse(stockInput, out stock))
                 {
-                    Console.WriteLine("Ogiltig lagermängd! Hela tal endast.");
-                    Console.Write("Ny lagermängd(enter för att behålla): ");
+                    Console.WriteLine("Ogiltig lagermängd! Ange ett heltal.");
+                    Console.Write("Ny lagermängd (enter för att behålla): ");
+                    stockInput = Console.ReadLine(); 
                 }
-                while (!int.TryParse(Console.ReadLine(), out stock));
-                product.Stock = stock;
+                product.Stock = stock; 
             }
 
             Console.Write("Ny kategori (enter för att behålla): ");
