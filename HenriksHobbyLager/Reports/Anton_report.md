@@ -40,7 +40,7 @@ som implementerar interfacet.
 Vi har använt 'repository pattern' för att på ett smidigt sätt kunna separera databasförfrågningar och annan logik.
 
 ## Vilka tekniska utmaningar stötte ni på och hur löste ni dem?
-?????????????????? Minns ej!!!!
+Vi hade en del problem med databasintegrationen. Lösningarna dök upp löpande när vi samarbetade i videomöte.
 
 ## Hur planerade du ditt arbete?
 Jag planerade löpande tillsammans med gruppen. Vi använde oss av Trello och scrum-metoden för att beta av backloggen
