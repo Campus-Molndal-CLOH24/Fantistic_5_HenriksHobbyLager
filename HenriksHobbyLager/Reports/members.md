@@ -7,8 +7,8 @@
 
 ## Kodare
 
-- 
-- 
-- 
-- 
-- 
+- Anton
+- Hugo
+- Kenny
+- Alireza
+- Parham
