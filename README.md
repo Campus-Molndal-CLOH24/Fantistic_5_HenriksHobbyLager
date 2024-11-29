@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-# HenriksHobbyLager
-=======
 # HenriksHobbyLager
 
 ## Medlemmar
@@ -86,4 +83,4 @@ Varje produkt innehåller följande egenskaper:
 - **LastUpdated**: Tidsstämpeln för senaste uppdatering (nullable DateTime).
 
 Framtida versioner kan inkludera en persistent databas, exempelvis SQLite.  
-Data kan också lagras som ett mer strukturerat format.>>>>>>> Stashed changes
+Data kan också lagras som ett mer strukturerat format.
