@@ -70,7 +70,7 @@ namespace HenriksHobbyLager.UI
 
             Console.Write("Namn: ");
             var name = Console.ReadLine();
-            while (string.IsNullOrWhiteSpace(name)) 
+            while (string.IsNullOrWhiteSpace(name))
             {
                 Console.WriteLine("Namn får inte vara tomt!");
                 Console.Write("Namn: ");
@@ -138,7 +138,7 @@ namespace HenriksHobbyLager.UI
                 product.Name = name;
 
             decimal price;
-            while (true) 
+            while (true)
             {
                 Console.Write("Nytt pris (enter för att behålla): ");
                 var priceInput = Console.ReadLine();
@@ -146,25 +146,25 @@ namespace HenriksHobbyLager.UI
                     break;
 
                 if (decimal.TryParse(priceInput, out price) && price > 0)
-                {                                       
+                {
                     product.Price = price;
                     break;
                 }
                 Console.WriteLine("Ogiltigt pris! Använd punkt istället för komma.");
-            }                            
-
-            Console.Write("Ny lagermängd (enter för att behålla): ");
-            var stockInput = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(stockInput)) 
+            }
+            int stock;
+            while (true)
             {
-                int stock;
-                do
+                Console.Write("Ny lagermängd (enter för att behålla): ");
+                var stockInput = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(stockInput))
+                    break;
+                if (int.TryParse(stockInput, out stock) && stock > 0)
                 {
-                    Console.WriteLine("Ogiltig lagermängd! Hela tal endast.");
-                    Console.Write("Ny lagermängd(enter för att behålla): ");
+                    product.Stock = stock;
+                    break;
                 }
-                while (!int.TryParse(Console.ReadLine(), out stock));
-                product.Stock = stock;
+                Console.WriteLine("Ogiltig lagermängd! Hela tal endast.");
             }
 
             Console.Write("Ny kategori (enter för att behålla): ");
