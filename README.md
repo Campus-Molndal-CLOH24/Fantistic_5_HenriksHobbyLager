@@ -29,7 +29,7 @@ Skapa en ny fil i katalogen med namnet `.env`.
 3. **Lägg till MongoDB-anslutningssträngen**  
 Öppna `.env`-filen i en textredigerare och lägg till följande rad:
 ```env
-MONGO_DB_CONNECTION= DIN ANSLUTNINGSSTRÄNG
+MONGO_DB_CONNECTION=DIN ANSLUTNINGSSTRÄNG
 ```
 
 ## Hur man kör programmet
