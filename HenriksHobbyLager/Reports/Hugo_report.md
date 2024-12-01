@@ -1,7 +1,7 @@
 ﻿# Individuell Rapport
 
 ## Hur fungerade gruppens arbete?
-Grupparbetet sköttes fint, och alla var delaktiga även om det fanns en viss skillnad i kunskapsnivå. Detta gjorde att Anton och Kenny naturligt tog på sig mer ansvar. Jag försökte bidra så mycket som möjligt, men på grund av bristande kunskap var det inte alltid lätt att göra lika mycket som de andra.
+Grupparbetet sköttes fint, och alla var delaktiga även om det fanns en viss skillnad i kunskapsnivå.
 
 ---
 ## Gruppens Databasimplementation
